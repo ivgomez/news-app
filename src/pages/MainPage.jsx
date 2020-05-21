@@ -42,6 +42,8 @@ class MainPage extends React.Component {
       searchByQuery(params.query).then((data) =>
         this.setState({ newsData: data })
       );
+    } else if (category === 0) {
+      searchByCategory(1).then((data) => this.setState({ newsData: data }));
     } else {
       searchByCategory(category).then((data) =>
         this.setState({ newsData: data })

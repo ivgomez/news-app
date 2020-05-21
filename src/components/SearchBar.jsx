@@ -56,7 +56,7 @@ const SearchBarWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   height: 60px;
-  padding: 0 50px;
+  padding: 0 10px;
   background-color: #fb2865;
   font-size: 16px;
   color: white;
