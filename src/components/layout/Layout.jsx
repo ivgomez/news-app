@@ -19,7 +19,7 @@ const Layout = () => {
         <Ul>
           {categories.map(
             (p) =>
-              p.id >= 0 && (
+              p.id !== 7 && (
                 <Li key={p.title}>
                   <Link to={p.path}>{p.title}</Link>
                 </Li>
@@ -28,13 +28,15 @@ const Layout = () => {
         </Ul>
       </Nav>
       <Switch>
-        {categories.map((p) => (
-          <Route
-            path={p.path}
-            component={(props) => <MainPage {...props} category={p.id} />}
-            key={p.id}
-          />
-        ))}
+        {categories
+          .sort((a, b) => b.id - a.id)
+          .map((p) => (
+            <Route
+              path={p.path}
+              component={(props) => <MainPage {...props} category={p.id} />}
+              key={p.id}
+            />
+          ))}
       </Switch>
     </BrowserRouter>
   );

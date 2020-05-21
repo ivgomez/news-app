@@ -40,12 +40,12 @@ class MainPage extends React.Component {
       match: { params },
       category,
     } = this.props;
-    if (category === -1) {
+    if (category === 7) {
       searchByQuery(params.query).then((data) =>
         this.setState({ newsData: data, isLoading: false })
       );
     } else if (category === 0) {
-      searchByCategory(1).then((data) =>
+      searchByDate(Moment(new Date()).format("YYYY-MM-DD")).then((data) =>
         this.setState({ newsData: data, isLoading: false })
       );
     } else {
