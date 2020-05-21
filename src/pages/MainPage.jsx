@@ -8,6 +8,8 @@ import styled from "styled-components";
 import Card from "../components/Card";
 import Moment from "moment";
 import { categories } from "../const/categories";
+import { css } from "@emotion/core";
+import BounceLoader from "react-spinners/BounceLoader";
 
 class MainPage extends React.Component {
   constructor(props) {
@@ -28,7 +30,7 @@ class MainPage extends React.Component {
     ) {
       this.setState({ news: [], isLoading: true });
       searchByQuery(params.query).then((data) =>
-        this.setState({ newsData: data })
+        this.setState({ newsData: data, isLoading: false })
       );
     }
   }
@@ -40,19 +42,27 @@ class MainPage extends React.Component {
     } = this.props;
     if (category === -1) {
       searchByQuery(params.query).then((data) =>
-        this.setState({ newsData: data })
+        this.setState({ newsData: data, isLoading: false })
       );
     } else if (category === 0) {
       searchByCategory(1).then((data) => this.setState({ newsData: data }));
     } else {
       searchByCategory(category).then((data) =>
-        this.setState({ newsData: data })
+        this.setState({ newsData: data, isLoading: false })
       );
     }
   }
 
   render() {
-    return (
+    return this.state.isLoading ? (
+      <LoaderWrapper>
+        <BounceLoader
+          css={override}
+          color="#fb2865"
+          loading={this.state.isLoading}
+        />
+      </LoaderWrapper>
+    ) : (
       <CardWrapper>
         {this.state.newsData.map((data, index) => (
           <Card data={data} key={index} />
@@ -63,6 +73,15 @@ class MainPage extends React.Component {
 }
 
 export default MainPage;
+
+const LoaderWrapper = styled.div`
+  width: 100%;
+`;
+
+const override = css`
+  display: block;
+  margin: 0 auto;
+`;
 
 const CardWrapper = styled.div`
   display: grid;
