@@ -45,7 +45,9 @@ class MainPage extends React.Component {
         this.setState({ newsData: data, isLoading: false })
       );
     } else if (category === 0) {
-      searchByCategory(1).then((data) => this.setState({ newsData: data }));
+      searchByCategory(1).then((data) =>
+        this.setState({ newsData: data, isLoading: false })
+      );
     } else {
       searchByCategory(category).then((data) =>
         this.setState({ newsData: data, isLoading: false })

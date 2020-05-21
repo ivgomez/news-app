@@ -20,7 +20,7 @@ const Layout = () => {
           {categories.map(
             (p) =>
               p.id >= 0 && (
-                <Li key={p.id}>
+                <Li key={p.title}>
                   <Link to={p.path}>{p.title}</Link>
                 </Li>
               )
