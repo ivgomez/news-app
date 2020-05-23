@@ -1,26 +1,26 @@
 import React from "react";
-import {
-  searchByCategory,
-  searchByDate,
-  searchByQuery,
-} from "../services/services";
 import styled from "styled-components";
 import Card from "../components/Card";
 import Moment from "moment";
 import { categories } from "../const/categories";
 import { css } from "@emotion/core";
 import BounceLoader from "react-spinners/BounceLoader";
+import {
+  getNewsByCategory,
+  getNewsByDate,
+  getNewsByQuery,
+} from "../actions/category.action";
+import { connect } from "react-redux";
 
 class MainPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      newsData: [],
-      isLoading: true,
-    };
+    this.getNewsByCategory = this.props.getNewsByCategory;
+    this.getNewsByDate = this.props.getNewsByDate;
+    this.getNewsByQuery = this.props.getNewsByQuery;
   }
 
-  async componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps) {
     const {
       match: { params },
     } = this.props;
@@ -28,45 +28,34 @@ class MainPage extends React.Component {
       this.props.category === categories[0].id &&
       prevProps.match.params.query !== this.props.match.params.query
     ) {
-      this.setState({ news: [], isLoading: true });
-      searchByQuery(params.query).then((data) =>
-        this.setState({ newsData: data, isLoading: false })
-      );
+      this.getNewsByQuery(params.query);
     }
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     const {
       match: { params },
       category,
     } = this.props;
     if (category === 7) {
-      searchByQuery(params.query).then((data) =>
-        this.setState({ newsData: data, isLoading: false })
-      );
+      this.getNewsByQuery(params.query);
     } else if (category === 0) {
-      searchByDate(Moment(new Date()).format("YYYY-MM-DD")).then((data) =>
-        this.setState({ newsData: data, isLoading: false })
-      );
+      this.getNewsByDate(Moment(new Date()).format("YYYY-MM-DD"));
     } else {
-      searchByCategory(category).then((data) =>
-        this.setState({ newsData: data, isLoading: false })
-      );
+      this.getNewsByCategory(category);
     }
   }
 
   render() {
-    return this.state.isLoading ? (
+    const { news, isLoading } = this.props;
+    console.log("isLoading", isLoading);
+    return isLoading ? (
       <LoaderWrapper>
-        <BounceLoader
-          css={override}
-          color="#fb2865"
-          loading={this.state.isLoading}
-        />
+        <BounceLoader css={override} color="#fb2865" loading={isLoading} />
       </LoaderWrapper>
     ) : (
       <CardWrapper>
-        {this.state.newsData.map((data, index) => (
+        {news?.map((data, index) => (
           <Card data={data} key={index} />
         ))}
       </CardWrapper>
@@ -74,7 +63,20 @@ class MainPage extends React.Component {
   }
 }
 
-export default MainPage;
+const mapStateToProps = (state) => {
+  return {
+    news: state.news,
+    isLoading: state.isLoading,
+  };
+};
+
+const mapDispatchToProps = {
+  getNewsByCategory,
+  getNewsByDate,
+  getNewsByQuery,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MainPage);
 
 const LoaderWrapper = styled.div`
   width: 100%;
