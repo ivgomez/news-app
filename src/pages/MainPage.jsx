@@ -48,7 +48,6 @@ class MainPage extends React.Component {
 
   render() {
     const { news, isLoading } = this.props;
-    console.log("isLoading", isLoading);
     return isLoading ? (
       <LoaderWrapper>
         <BounceLoader css={override} color="#fb2865" loading={isLoading} />

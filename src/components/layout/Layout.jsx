@@ -28,15 +28,14 @@ const Layout = () => {
         </Ul>
       </Nav>
       <Switch>
-        {categories
-          .sort((a, b) => b.id - a.id)
-          .map((p) => (
-            <Route
-              path={p.path}
-              component={(props) => <MainPage {...props} category={p.id} />}
-              key={p.id}
-            />
-          ))}
+        {categories.map((p) => (
+          <Route
+            exact={p.path === "/"}
+            path={p.path}
+            component={(props) => <MainPage {...props} category={p.id} />}
+            key={p.id}
+          />
+        ))}
       </Switch>
     </BrowserRouter>
   );
